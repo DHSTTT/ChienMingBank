@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample-Demonstration Bank</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #f2f5f8;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            width: 350px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #004999;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        #result {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h2>Sample-Demonstration Bank</h2>
+
+    <a href="Password-List.txt" target="_blank">
+        Password-List
+    </a>
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Email"
+        required
+    >
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        required
+    >
+
+    <button onclick="checkPassword()">
+        Login
+    </button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+
+async function checkPassword() {
+
+    const password = document.getElementById("password").value;
+    const result = document.getElementById("result");
+
+    try {
+
+        // Read Password-List.txt from the same folder
+        const response = await fetch("Password-List.txt");
+
+        if (!response.ok) {
+            throw new Error("Unable to load Password-List.txt");
+        }
+
+        const text = await response.text();
+
+        // One password per line
+        const passwordList = text
+            .split(/\r?\n/)
+            .map(line => line.trim())
+            .filter(line => line.length > 0);
+
+        if (passwordList.includes(password)) {
+
+            result.style.color = "green";
+            result.textContent = "GOOD JOB, YOU ARE SECURE!";
+
+        } else {
+
+            result.style.color = "red";
+            result.textContent = `WRONG! Password entered: ${password}`;
+
+        }
+
+    } catch (error) {
+
+        result.style.color = "red";
+        result.textContent = "Error loading Password-List.txt";
+
+        console.error(error);
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
