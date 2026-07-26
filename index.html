@@ -1,142 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample-Demonstration Bank</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            background: #f2f5f8;
-            font-family: Arial, Helvetica, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+<title>Password Demonstrator</title>
 
-        .login-box {
-            width: 350px;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.15);
-        }
+<style>
 
-        h2 {
-            text-align: center;
-            margin-top: 0;
-        }
+body{
+    margin:0;
+    background:#eef2f7;
+    font-family:Arial,Helvetica,sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            box-sizing: border-box;
-        }
+.container{
+    width:360px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
 
-        button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background: #0066cc;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+h2{
+    text-align:center;
+    margin-top:0;
+}
 
-        button:hover {
-            background: #004999;
-        }
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+}
 
-        a {
-            display: block;
-            text-align: center;
-            margin-bottom: 15px;
-        }
+input{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    box-sizing:border-box;
+}
 
-        #result {
-            margin-top: 15px;
-            text-align: center;
-            font-weight: bold;
-        }
-    </style>
+button{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    background:#0066cc;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#004b99;
+}
+
+#result{
+    margin-top:20px;
+    padding:12px;
+    border-radius:5px;
+    text-align:center;
+    display:none;
+}
+
+.safe{
+    background:#d4edda;
+    color:#155724;
+}
+
+.unsafe{
+    background:#f8d7da;
+    color:#721c24;
+}
+
+.error{
+    background:#fff3cd;
+    color:#856404;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<div class="login-box">
+<div class="container">
 
-    <h2>Sample-Demonstration Bank</h2>
+<h2>Password Demonstrator</h2>
 
-    <a href="Password-List.txt" target="_blank">
-        Password-List
-    </a>
+<label>Email</label>
+<input
+type="email"
+id="email"
+placeholder="name@example.com">
 
-    <input
-        type="email"
-        id="email"
-        placeholder="Email"
-        required
-    >
+<label>Password</label>
+<input
+type="password"
+id="password"
+placeholder="Enter a password">
 
-    <input
-        type="password"
-        id="password"
-        placeholder="Password"
-        required
-    >
+<button id="checkButton">
+Check Password
+</button>
 
-    <button onclick="checkPassword()">
-        Login
-    </button>
-
-    <div id="result"></div>
+<div id="result"></div>
 
 </div>
 
 <script>
 
-async function checkPassword() {
+const button = document.getElementById("checkButton");
 
-    const password = document.getElementById("password").value;
-    const result = document.getElementById("result");
+button.addEventListener("click", checkPassword);
 
-    try {
+async function checkPassword(){
 
-        // Read Password-List.txt from the same folder
-        const response = await fetch("Password-List.txt");
+    const password =
+        document.getElementById("password").value.trim();
 
-        if (!response.ok) {
-            throw new Error("Unable to load Password-List.txt");
+    const result =
+        document.getElementById("result");
+
+    result.style.display = "block";
+
+    if(password.length === 0){
+
+        result.className = "error";
+        result.textContent = "Please enter a password.";
+        return;
+
+    }
+
+    try{
+
+        const response =
+            await fetch("Password-List.txt");
+
+        if(!response.ok){
+            throw new Error();
         }
 
         const text = await response.text();
 
-        // One password per line
-        const passwordList = text
+        const passwords =
+            text
             .split(/\r?\n/)
-            .map(line => line.trim())
-            .filter(line => line.length > 0);
+            .map(p => p.trim())
+            .filter(p => p !== "");
 
-        if (passwordList.includes(password)) {
+        if(passwords.includes(password)){
 
-            result.style.color = "green";
-            result.textContent = "GOOD JOB, YOU ARE SECURE!";
+            result.className = "unsafe";
+            result.innerHTML =
+                "<strong>⚠ Weak Password</strong><br><br>" +
+                "This password appears in the demonstration list.";
 
-        } else {
+        }else{
 
-            result.style.color = "red";
-            result.textContent = `WRONG! Password entered: ${password}`;
+            result.className = "safe";
+            result.innerHTML =
+                "<strong>✓ Not Found</strong><br><br>" +
+                "This password does not appear in the demonstration list.";
 
         }
 
-    } catch (error) {
+    }
+    catch(error){
 
-        result.style.color = "red";
-        result.textContent = "Error loading Password-List.txt";
+        result.className = "error";
+        result.innerHTML =
+            "Unable to load <strong>Password-List.txt</strong>.";
 
         console.error(error);
 
