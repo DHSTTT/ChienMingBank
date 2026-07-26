@@ -8,79 +8,136 @@
 
 <style>
 
-body{
+*{
     margin:0;
-    background:#eef2f7;
-    font-family:Arial,Helvetica,sans-serif;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Inter,"Segoe UI",Arial,sans-serif;
+    background:linear-gradient(135deg,#2563eb,#4f46e5,#7c3aed);
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    padding:20px;
 }
 
 .container{
-    width:360px;
-    background:white;
-    padding:30px;
-    border-radius:10px;
-    box-shadow:0 5px 15px rgba(0,0,0,.15);
+    width:100%;
+    max-width:420px;
+    background:rgba(255,255,255,0.95);
+    backdrop-filter:blur(18px);
+    border-radius:20px;
+    padding:40px;
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.15),
+        0 0 0 1px rgba(255,255,255,.2);
+    animation:fadeIn .5s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
 h2{
     text-align:center;
-    margin-top:0;
+    color:#1f2937;
+    margin-bottom:10px;
+    font-size:28px;
+    font-weight:700;
+}
+
+.subtitle{
+    text-align:center;
+    color:#6b7280;
+    font-size:14px;
+    margin-bottom:30px;
 }
 
 label{
     display:block;
-    margin-top:15px;
-    font-weight:bold;
+    margin-bottom:8px;
+    color:#374151;
+    font-size:14px;
+    font-weight:600;
 }
 
 input{
     width:100%;
-    padding:10px;
-    margin-top:5px;
-    box-sizing:border-box;
+    padding:14px 16px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    font-size:15px;
+    margin-bottom:18px;
+    transition:.25s;
+    background:#f9fafb;
+}
+
+input:focus{
+    outline:none;
+    border-color:#4f46e5;
+    background:white;
+    box-shadow:0 0 0 4px rgba(79,70,229,.15);
 }
 
 button{
     width:100%;
-    padding:12px;
-    margin-top:20px;
-    background:#0066cc;
-    color:white;
+    padding:15px;
     border:none;
-    border-radius:5px;
-    cursor:pointer;
+    border-radius:12px;
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
+    color:white;
     font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
 }
 
 button:hover{
-    background:#004b99;
+    transform:translateY(-2px);
+    box-shadow:0 12px 25px rgba(79,70,229,.3);
+}
+
+button:active{
+    transform:translateY(0);
 }
 
 #result{
-    margin-top:20px;
-    padding:12px;
-    border-radius:5px;
-    text-align:center;
     display:none;
+    margin-top:25px;
+    padding:18px;
+    border-radius:12px;
+    text-align:center;
+    font-size:15px;
+    line-height:1.5;
+    animation:fadeIn .3s ease;
 }
 
 .safe{
-    background:#d4edda;
-    color:#155724;
+    background:#ecfdf5;
+    color:#065f46;
+    border:1px solid #6ee7b7;
 }
 
 .unsafe{
-    background:#f8d7da;
-    color:#721c24;
+    background:#fef2f2;
+    color:#991b1b;
+    border:1px solid #fca5a5;
 }
 
 .error{
-    background:#fff3cd;
-    color:#856404;
+    background:#fffbeb;
+    color:#92400e;
+    border:1px solid #fcd34d;
 }
 
 </style>
@@ -91,7 +148,7 @@ button:hover{
 
 <div class="container">
 
-<h2>Password Demonstrator</h2>
+<h2>Chien Ming Bank</h2>
 
 <label>Email</label>
 <input
